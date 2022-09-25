@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 /**
  * This class stores the basic state necessary for the A* algorithm to compute a
  * path across a map. This state includes a collection of "open waypoints" and
@@ -8,6 +10,9 @@
 public class AStarState {
     /** This is a reference to the map that the A* algorithm is navigating. **/
     private Map2D map;
+
+    private HashMap<Location, Waypoint> openWaypoints = new HashMap<Location, Waypoint>();
+    private HashMap<Location, Waypoint> closeWaypoints = new HashMap<Location, Waypoint>();
 
     /**
      * Initialize a new state object for the A* pathfinding algorithm to use.
@@ -29,7 +34,18 @@ public class AStarState {
      * with the minimum total cost. If there are no open waypoints, this method
      * returns <code>null</code>.
      **/
+
     public Waypoint getMinOpenWaypoint() {
+        if (this.numOpenWaypoints() == 0) {
+            return null;
+        }
+        // ??? what object have
+        System.out.println(this);
+
+        for (int i = 0; i < this.numOpenWaypoints(); i++) {
+            // getTotalCost();
+            // find minimum
+        }
         // TODO: Implement.
         return null;
     }
@@ -50,8 +66,7 @@ public class AStarState {
 
     /** Returns the current number of open waypoints. **/
     public int numOpenWaypoints() {
-        // TODO: Implement.
-        return 0;
+        return openWaypoints.size();
     }
 
     /**
