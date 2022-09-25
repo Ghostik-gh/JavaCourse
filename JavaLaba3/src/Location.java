@@ -20,15 +20,19 @@ public class Location {
         this(0, 0);
     }
 
-    /** **/
-    public int equals() {
-
-        return 0;
+    /** Return true if Location equals **/
+    public boolean equals(Location second) {
+        return (this.xCoord == second.xCoord && this.yCoord == second.yCoord) ? true : false;
     }
 
-    /** **/
+    /** Provides a hashCode for each Location **/
     public int hashCode() {
+        // some prime value
+        int result = 13;
+        // use another prime value
+        result = 11 * result + xCoord;
+        result = 11 * result + yCoord;
 
-        return 0;
+        return result;
     }
 }
