@@ -97,7 +97,10 @@ public class AStarState {
      * open list to the closed list.
      **/
     public void closeWaypoint(Location loc) {
-        // TODO: Implement.
+        // Сначала добавим вершину в список закрытых
+        closeWaypoints.put(loc, openWaypoints.get(loc));
+        // Удалим вершину из набора открытых
+        openWaypoints.remove(loc);
     }
 
     /**
