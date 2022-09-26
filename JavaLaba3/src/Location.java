@@ -21,8 +21,13 @@ public class Location {
     }
 
     /** Return true if Location equals **/
-    public boolean equals(Location second) {
-        return (this.xCoord == second.xCoord && this.yCoord == second.yCoord) ? true : false;
+    public boolean equals(Object obj) {
+
+        if (obj instanceof Location) {
+            Location loc = (Location) obj;
+            return (xCoord == loc.xCoord && yCoord == loc.yCoord) ? true : false;
+        }
+        return false;
     }
 
     /** Provides a hashCode for each Location **/
