@@ -45,9 +45,9 @@ public class AStarState {
         // Лучшая цена по умолчанию устанавливается максимальное значение
         float bestCost = Float.MAX_VALUE;
         // Создаем итератор из всех Локаций
-        Iterator keys = openWaypoints.keySet().iterator();
+        Iterator<Location> keys = openWaypoints.keySet().iterator();
         for (int i = 0; i < numOpenWaypoints(); i++) {
-            Location location = (Location) keys.next();
+            Location location = keys.next();
             Waypoint waypoint = openWaypoints.get(location);
             float totatlCostWaipoint = waypoint.getTotalCost();
             // find minimum cost
@@ -107,9 +107,8 @@ public class AStarState {
      * Returns true if the collection of closed waypoints contains a waypoint
      * for the specified location.
      **/
+    // Метод для работы в случае если не возможно построить путь
     public boolean isLocationClosed(Location loc) {
-
-        // TODO: Implement.
-        return false;
+        return closeWaypoints.containsKey(loc);
     }
 }
