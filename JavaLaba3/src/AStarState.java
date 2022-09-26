@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * This class stores the basic state necessary for the A* algorithm to compute a
@@ -32,22 +33,30 @@ public class AStarState {
     /**
      * This method scans through all open waypoints, and returns the waypoint
      * with the minimum total cost. If there are no open waypoints, this method
-     * returns <code>null</code>.
+     * <code>returns null</code>
      **/
 
     public Waypoint getMinOpenWaypoint() {
         if (this.numOpenWaypoints() == 0) {
             return null;
         }
-        // ??? what object have
-        System.out.println(this);
-
-        for (int i = 0; i < this.numOpenWaypoints(); i++) {
-            // getTotalCost();
-            // find minimum
+        // Waypoint Который возыращает функция
+        Waypoint bestWaypoint = null;
+        // Лучшая цена по умолчанию устанавливается максимальное значение
+        float bestCost = Float.MAX_VALUE;
+        // Создаем итератор из всех Локаций
+        Iterator keys = openWaypoints.keySet().iterator();
+        for (int i = 0; i < numOpenWaypoints(); i++) {
+            Location location = (Location) keys.next();
+            Waypoint waypoint = openWaypoints.get(location);
+            float totatlCostWaipoint = waypoint.getTotalCost();
+            // find minimum cost
+            if (totatlCostWaipoint < bestCost) {
+                bestCost = totatlCostWaipoint;
+                bestWaypoint = waypoint;
+            }
         }
-        // TODO: Implement.
-        return null;
+        return bestWaypoint;
     }
 
     /**
@@ -60,8 +69,22 @@ public class AStarState {
      * waypoint's "previous cost" value.
      **/
     public boolean addOpenWaypoint(Waypoint newWP) {
-        // TODO: Implement.
-        return false;
+        // Сохраняем локацию текущей вершины
+        Location location = newWP.getLocation();
+        if (!openWaypoints.containsKey(location)) {
+            openWaypoints.put(location, newWP);
+            return true;
+        } else {
+            // Если вершина есть то сохраняем ее
+            Waypoint currentWaypoint = openWaypoints.get(location);
+            // Если стоимость новой вершины меньше, то заменяем ее в списке открытых вершин
+            if (currentWaypoint.getPreviousCost() > newWP.getPreviousCost()) {
+                openWaypoints.put(location, newWP);
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 
     /** Returns the current number of open waypoints. **/
@@ -82,6 +105,7 @@ public class AStarState {
      * for the specified location.
      **/
     public boolean isLocationClosed(Location loc) {
+
         // TODO: Implement.
         return false;
     }
