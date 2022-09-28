@@ -21,17 +21,13 @@ public class Mandelbrot extends FractalGenerator {
         // Ограничения для функции
         // |Z| > 2
         // или пока меньше MAX_ITERATIONS
+        int iteration = 0; // Текущая итерация
+        double zReal = 0.0; // Действительная
+        double zComplex = 0.0; // и комплексная часть
 
-        // Текущая итерация
-        int iteration = 0;
-        // Действительная и комплексная часть
-        double zReal = 0.0;
-        double zComplex = 0.0;
-
-        while (iteration < MAX_ITERATIONS && zReal * zReal + zComplex * zComplex > 4) {
-            // Z0 = 0
-            // Z1 = Z0 * Z0 + c = x + y*i
-            // Z2 = Z1 * Z1 + c = ...
+        while (iteration < MAX_ITERATIONS && zReal * zReal + zComplex * zComplex < 4) {
+            // Z0 = 0, Z1 = Z0 * Z0 + c = x + y*i, Z2 = ...
+            // Xn+1 = Xn^2 + Yn^2 + x; Yn+1 = 2*Xn*Yn + y
             // from wikipedia)
             double zRealNew = zReal * zReal - zComplex * zComplex + x;
             double zComplexNew = 2 * zReal * zComplex + y;

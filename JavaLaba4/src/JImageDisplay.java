@@ -20,7 +20,6 @@ public class JImageDisplay extends JComponent {
     }
 
     public void clearImage() {
-        // TODO: от 0 до предела или от 1 до предела?
         // Заменяем каждый пиксель на черный
         for (int i = 0; i < img.getWidth(); i++) {
             for (int j = 0; j < img.getHeight(); j++) {
