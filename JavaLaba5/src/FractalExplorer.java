@@ -18,7 +18,7 @@ public class FractalExplorer {
     public FractalExplorer(int size) {
         displaySize = size;
 
-        fractal = new Mandelbrot();
+        fractal = new BurningShip();
         rectangle = new Rectangle2D.Double();
         fractal.getInitialRange(rectangle);
         display = new JImageDisplay(displaySize, displaySize);
@@ -108,6 +108,7 @@ public class FractalExplorer {
     public static void main(String[] args) {
         FractalExplorer fractal = new FractalExplorer(600);
         fractal.createAndShowGUI();
+        System.out.println(fractal.toString());
         fractal.drawFractal();
     }
 }

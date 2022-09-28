@@ -4,12 +4,12 @@ public class Mandelbrot extends FractalGenerator {
     // Максимальное количество итераций
     public static final int MAX_ITERATIONS = 2000;
 
-    public void getInitialRange(Rectangle2D.Double rectangle) {
+    public void getInitialRange(Rectangle2D.Double range) {
         // Значения для фрактала Мандельброта
-        rectangle.x = -2;
-        rectangle.y = -1.5;
-        rectangle.height = 3;
-        rectangle.width = 3;
+        range.x = -2;
+        range.y = -1.5;
+        range.height = 3;
+        range.width = 3;
     }
 
     /*
