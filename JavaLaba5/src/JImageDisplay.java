@@ -19,6 +19,10 @@ public class JImageDisplay extends JComponent {
         g.drawImage(img, 0, 0, img.getWidth(), img.getHeight(), null);
     }
 
+    public BufferedImage getImage() {
+        return img;
+    }
+
     public void clearImage() {
         // Заменяем каждый пиксель на черный
         for (int i = 0; i < img.getWidth(); i++) {
