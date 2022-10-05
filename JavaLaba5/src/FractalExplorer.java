@@ -20,7 +20,7 @@ public class FractalExplorer {
     private int displaySize;
     private JImageDisplay display;
     private FractalGenerator fractal;
-    private Rectangle2D.Double rectangle;
+    private Rectangle2D.Double range;
 
     /**
      * Конструктор принимает размер окна и инициализирует все поля класса
@@ -29,13 +29,14 @@ public class FractalExplorer {
         displaySize = size;
         // Фрактал по умолчанию
         fractal = new Mandelbrot();
-        rectangle = new Rectangle2D.Double();
-        fractal.getInitialRange(rectangle);
+        range = new Rectangle2D.Double();
+        fractal.getInitialRange(range);
         display = new JImageDisplay(displaySize, displaySize);
     }
 
     /**
      * Этот метод инициализирует Swing GUI из полей находящихся в классе
+     * Создает интерфейс
      */
     public void createAndShowGUI() {
         display.setLayout(new BorderLayout());
@@ -66,22 +67,22 @@ public class FractalExplorer {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Выпадающее окно
-        JComboBox<FractalGenerator> checkbox = new JComboBox<FractalGenerator>();
+        JComboBox<FractalGenerator> selectFractal = new JComboBox<FractalGenerator>();
 
         FractalGenerator mandelbrot = new Mandelbrot();
-        checkbox.addItem(mandelbrot);
+        selectFractal.addItem(mandelbrot);
         FractalGenerator tricorn = new Tricorn();
-        checkbox.addItem(tricorn);
+        selectFractal.addItem(tricorn);
         FractalGenerator burningship = new BurningShip();
-        checkbox.addItem(burningship);
+        selectFractal.addItem(burningship);
 
-        ButtonHandler checkboxChooser = new ButtonHandler();
-        checkbox.addActionListener(checkboxChooser);
+        ButtonHandler fractalChooser = new ButtonHandler();
+        selectFractal.addActionListener(fractalChooser);
 
         JPanel panel = new JPanel();
         JLabel label = new JLabel("Выберите фрактал");
         panel.add(label);
-        panel.add(checkbox);
+        panel.add(selectFractal);
         frame.add(panel, BorderLayout.NORTH);
 
         frame.pack();
@@ -97,10 +98,10 @@ public class FractalExplorer {
         for (int x = 0; x < displaySize; x++) {
             for (int y = 0; y < displaySize; y++) {
 
-                double xCoord = FractalGenerator.getCoord(rectangle.x, rectangle.x +
-                        rectangle.width, displaySize, x);
-                double yCoord = FractalGenerator.getCoord(rectangle.y, rectangle.y +
-                        rectangle.height, displaySize, y);
+                double xCoord = FractalGenerator.getCoord(range.x, range.x +
+                        range.width, displaySize, x);
+                double yCoord = FractalGenerator.getCoord(range.y, range.y +
+                        range.height, displaySize, y);
 
                 int iteration = fractal.numIterations(xCoord, yCoord);
 
@@ -117,20 +118,20 @@ public class FractalExplorer {
     }
 
     private class ButtonHandler implements ActionListener {
-        // метод созданный по умолчанию
-        @Override
+
+        @Override // метод созданный по умолчанию
         public void actionPerformed(ActionEvent e) {
             // Возващает "Reset" для reset'a или "Save"
             String comand = e.getActionCommand();
             // Возвращает фрактал к изначальному положению
             if (e.getSource() instanceof JComboBox) {
-                JComboBox<FractalGenerator> source = (JComboBox) e.getSource();
+                JComboBox<FractalGenerator> source = (JComboBox<FractalGenerator>) e.getSource();
                 fractal = (FractalGenerator) source.getSelectedItem();
-                fractal.getInitialRange(rectangle);
+                fractal.getInitialRange(range);
                 drawFractal();
                 System.out.println("Choosen another fractal");
             } else if (comand.equals("Reset")) {
-                fractal.getInitialRange(rectangle);
+                fractal.getInitialRange(range);
                 drawFractal();
                 System.out.println("Reseted");
             } else if (comand.equals("Save")) {
@@ -165,19 +166,22 @@ public class FractalExplorer {
         }
     }
 
+    /*
+     * Приближает фрактал в точку клика
+     */
     private class MouseHandler extends MouseAdapter {
         public void mouseClicked(MouseEvent e) {
             // Координаты клика
             int x = e.getX();
             int y = e.getY();
             // Новые координаты центра
-            double xCoord = FractalGenerator.getCoord(rectangle.x,
-                    rectangle.x + rectangle.width, displaySize, x);
-            double yCoord = FractalGenerator.getCoord(rectangle.y,
-                    rectangle.y + rectangle.height, displaySize, y);
+            double xCoord = FractalGenerator.getCoord(range.x,
+                    range.x + range.width, displaySize, x);
+            double yCoord = FractalGenerator.getCoord(range.y,
+                    range.y + range.height, displaySize, y);
 
             // Устанавливаем центр в точку по которой был клик и приближаем
-            fractal.recenterAndZoomRange(rectangle, xCoord, yCoord, 0.5);
+            fractal.recenterAndZoomRange(range, xCoord, yCoord, 0.5);
             // Перерисовываем
             drawFractal();
         }
