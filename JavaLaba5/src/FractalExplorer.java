@@ -1,12 +1,19 @@
-import java.awt.geom.Rectangle2D;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import javax.imageio.ImageIO;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.geom.Rectangle2D;
+import java.io.File;
 import java.awt.event.*;
 
 public class FractalExplorer {
@@ -37,10 +44,21 @@ public class FractalExplorer {
         frame.add(display, BorderLayout.CENTER);
         // Создаем кнопку
         JButton resetButton = new JButton("Reset scale");
+        resetButton.setActionCommand("Reset");
         // Обработчик для конпки сброса
         ButtonHandler handler = new ButtonHandler();
         resetButton.addActionListener(handler);
-        frame.add(resetButton, BorderLayout.SOUTH);
+
+        // Кнопка сохранения
+        JButton saveButton = new JButton("Save");
+        ButtonHandler saveHandler = new ButtonHandler();
+        saveButton.addActionListener(saveHandler);
+
+        JPanel southPanel = new JPanel();
+        southPanel.add(saveButton);
+        southPanel.add(resetButton);
+
+        frame.add(southPanel, BorderLayout.SOUTH);
         // Обработчик для клика мыши по фракталу
         MouseHandler click = new MouseHandler();
         display.addMouseListener(click);
@@ -102,15 +120,47 @@ public class FractalExplorer {
         // метод созданный по умолчанию
         @Override
         public void actionPerformed(ActionEvent e) {
+            // Возващает "Reset" для reset'a или "Save"
+            String comand = e.getActionCommand();
             // Возвращает фрактал к изначальному положению
             if (e.getSource() instanceof JComboBox) {
                 JComboBox<FractalGenerator> source = (JComboBox) e.getSource();
                 fractal = (FractalGenerator) source.getSelectedItem();
                 fractal.getInitialRange(rectangle);
                 drawFractal();
-            } else {
+                System.out.println("Choosen another fractal");
+            } else if (comand.equals("Reset")) {
                 fractal.getInitialRange(rectangle);
                 drawFractal();
+                System.out.println("Reseted");
+            } else if (comand.equals("Save")) {
+                // создает окно для выбора места сохранения файла
+                JFileChooser chooser = new JFileChooser();
+                // сохраянет только png
+                FileFilter filter = new FileNameExtensionFilter(
+                        "PNG Images, *.png", "png");
+                chooser.setFileFilter(filter);
+                // и не показывает ничего кроме png и папок
+                chooser.setAcceptAllFileFilterUsed(false);
+                // отображает всплывающее окно / 0 если файл указан
+                // 1 если пользователь передумал
+                int userSelection = chooser.showSaveDialog(display);
+                if (userSelection == JFileChooser.APPROVE_OPTION) {
+                    // Путь до файла
+                    File file = chooser.getSelectedFile();
+                    String file_name = file.toString() + ".png";
+                    File fileWithExt = new File(file_name);
+                    try {
+                        BufferedImage renderedImage = display.getImage();
+                        ImageIO.write(renderedImage, "png", fileWithExt);
+                    } catch (Exception err) {
+                        JOptionPane.showMessageDialog(
+                                display,
+                                err.getMessage(),
+                                "Cannot Save Image",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                }
             }
         }
     }
@@ -136,7 +186,6 @@ public class FractalExplorer {
     public static void main(String[] args) {
         FractalExplorer fractal = new FractalExplorer(600);
         fractal.createAndShowGUI();
-        System.out.println(fractal.fractal.toString());
         fractal.drawFractal();
     }
 }
