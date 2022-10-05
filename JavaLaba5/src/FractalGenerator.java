@@ -54,6 +54,11 @@ public abstract class FractalGenerator {
         range.height = newHeight;
     }
 
+    /*
+     * must return normal name fractal
+     */
+    public abstract String toString();
+
     /**
      * Given a coordinate <em>x</em> + <em>iy</em> in the complex plane,
      * computes and returns the number of iterations before the fractal

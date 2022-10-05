@@ -40,4 +40,9 @@ public class BurningShip extends FractalGenerator {
         return iteration;
     }
 
+    @Override
+    public String toString() {
+        return "Burning Ship";
+    }
+
 }

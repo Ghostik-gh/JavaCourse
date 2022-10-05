@@ -17,7 +17,7 @@ public class FractalExplorer {
      */
     public FractalExplorer(int size) {
         displaySize = size;
-
+        // Фрактал по умолчанию
         fractal = new BurningShip();
         rectangle = new Rectangle2D.Double();
         fractal.getInitialRange(rectangle);
@@ -108,7 +108,7 @@ public class FractalExplorer {
     public static void main(String[] args) {
         FractalExplorer fractal = new FractalExplorer(600);
         fractal.createAndShowGUI();
-        System.out.println(fractal.toString());
+        System.out.println(fractal.fractal.toString());
         fractal.drawFractal();
     }
 }
