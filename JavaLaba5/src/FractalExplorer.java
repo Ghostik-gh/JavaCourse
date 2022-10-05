@@ -1,7 +1,10 @@
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -13,12 +16,12 @@ public class FractalExplorer {
     private Rectangle2D.Double rectangle;
 
     /**
-     * Конструктор сохраняет размер окна и инициализирует все поля
+     * Конструктор принимает размер окна и инициализирует все поля класса
      */
     public FractalExplorer(int size) {
         displaySize = size;
         // Фрактал по умолчанию
-        fractal = new BurningShip();
+        fractal = new Mandelbrot();
         rectangle = new Rectangle2D.Double();
         fractal.getInitialRange(rectangle);
         display = new JImageDisplay(displaySize, displaySize);
@@ -30,12 +33,12 @@ public class FractalExplorer {
     public void createAndShowGUI() {
         display.setLayout(new BorderLayout());
         // Создаем окно с заголовком
-        JFrame frame = new JFrame("Fractal Explorer: Mandelbrot");
+        JFrame frame = new JFrame("Fractal Explorer");
         frame.add(display, BorderLayout.CENTER);
         // Создаем кнопку
         JButton resetButton = new JButton("Reset scale");
         // Обработчик для конпки сброса
-        ResetHandler handler = new ResetHandler();
+        ButtonHandler handler = new ButtonHandler();
         resetButton.addActionListener(handler);
         frame.add(resetButton, BorderLayout.SOUTH);
         // Обработчик для клика мыши по фракталу
@@ -43,6 +46,25 @@ public class FractalExplorer {
         display.addMouseListener(click);
         // Окно закрывается только при нажатие крестика
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Выпадающее окно
+        JComboBox<FractalGenerator> checkbox = new JComboBox<FractalGenerator>();
+
+        FractalGenerator mandelbrot = new Mandelbrot();
+        checkbox.addItem(mandelbrot);
+        FractalGenerator tricorn = new Tricorn();
+        checkbox.addItem(tricorn);
+        FractalGenerator burningship = new BurningShip();
+        checkbox.addItem(burningship);
+
+        ButtonHandler checkboxChooser = new ButtonHandler();
+        checkbox.addActionListener(checkboxChooser);
+
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Выберите фрактал");
+        panel.add(label);
+        panel.add(checkbox);
+        frame.add(panel, BorderLayout.NORTH);
 
         frame.pack();
         frame.setVisible(true);
@@ -76,14 +98,20 @@ public class FractalExplorer {
         display.repaint();
     }
 
-    private class ResetHandler implements ActionListener {
-
+    private class ButtonHandler implements ActionListener {
         // метод созданный по умолчанию
         @Override
         public void actionPerformed(ActionEvent e) {
             // Возвращает фрактал к изначальному положению
-            fractal.getInitialRange(rectangle);
-            drawFractal();
+            if (e.getSource() instanceof JComboBox) {
+                JComboBox<FractalGenerator> source = (JComboBox) e.getSource();
+                fractal = (FractalGenerator) source.getSelectedItem();
+                fractal.getInitialRange(rectangle);
+                drawFractal();
+            } else {
+                fractal.getInitialRange(rectangle);
+                drawFractal();
+            }
         }
     }
 
