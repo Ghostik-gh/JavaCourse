@@ -1,40 +1,22 @@
 
-public class Point3d {
-    private double x;
-    private double y;
+public class Point3d extends Point2d {
     private double z;
 
     // Точность с которой хранятся числа
     private static double precision = 1000d;
 
     public Point3d(double xInput, double yInput, double zInput) {
-        x = xInput;
-        y = yInput;
+        super(xInput, yInput);
         z = zInput;
     }
 
     public Point3d() {
-        this(0, 0, 0);
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
+        super();
+        z = 0;
     }
 
     public double getZ() {
         return z;
-    }
-
-    public void setX(double xInput) {
-        x = xInput;
-    }
-
-    public void setY(double yInput) {
-        y = yInput;
     }
 
     public void setZ(double zInput) {
@@ -48,20 +30,22 @@ public class Point3d {
 
     // Проверяет равенство точек возвращает true если равны иначе false
     public boolean equalsPoint3d(Point3d secondPoint) {
-        if (secondPoint.x != this.x)
+        if (secondPoint.getX() != super.getX())
             return false;
-        if (secondPoint.y != this.y)
+        if (secondPoint.getY() != super.getY())
             return false;
-        if (secondPoint.z != this.z)
+        if (secondPoint.getZ() != this.getZ())
             return false;
         return true;
     }
 
     // Вычисляет расстояние между двумя точками
     public static double distanceTo(Point3d firsPoint, Point3d secondPoint) {
-        double x = Math.round(Math.sqrt(Math.pow((secondPoint.x - firsPoint.x), 2) +
-                Math.pow((secondPoint.y - firsPoint.y), 2) +
-                Math.pow((secondPoint.z - firsPoint.z), 2)) * precision) / precision;
+        double x = Math.round(Math.sqrt(
+                Math.pow((secondPoint.getX() - firsPoint.getX()), 2) +
+                        Math.pow((secondPoint.getY() - firsPoint.getY()), 2) +
+                        Math.pow((secondPoint.getZ() - firsPoint.getZ()), 2))
+                * precision) / precision;
         return x;
 
     }
