@@ -18,9 +18,9 @@
 
 6 Tasks: 
 
-1. [1/6](https://github.com/Ghostik-gh/JavaCourse/tree/main/Task1)
-2. [2/6](https://github.com/Ghostik-gh/JavaCourse/tree/main/Task2)
-3. [3/6](https://github.com/Ghostik-gh/JavaCourse/tree/main/Task3)
-4. [4/6](https://github.com/Ghostik-gh/JavaCourse/tree/main/Task4)
-5. [5/6](https://github.com/Ghostik-gh/JavaCourse/tree/main/Task5)
-6. [6/6](https://github.com/Ghostik-gh/JavaCourse/tree/main/Task6)
+* [1/6 Easy](https://github.com/Ghostik-gh/JavaCourse/tree/main/Task1)
+* [2/6](https://github.com/Ghostik-gh/JavaCourse/tree/main/Task2)
+* [3/6](https://github.com/Ghostik-gh/JavaCourse/tree/main/Task3)
+* [4/6](https://github.com/Ghostik-gh/JavaCourse/tree/main/Task4)
+* [5/6](https://github.com/Ghostik-gh/JavaCourse/tree/main/Task5)
+* [6/6 Hard](https://github.com/Ghostik-gh/JavaCourse/tree/main/Task6)
