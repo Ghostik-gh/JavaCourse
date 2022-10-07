@@ -1,3 +1,3 @@
 # Решение третей десятки тасков
 
-![result]()
+![result](https://github.com/Ghostik-gh/JavaCourse/blob/main/Task3/result.png)
