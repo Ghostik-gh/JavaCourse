@@ -183,28 +183,46 @@ public class Task4 {
     }
 
     public static boolean trouble(int a, int b) {
-        Integer[] arr1 = new Integer[10];
-        for (int i = 0; i < arr1.length; i++) {
-            arr1[i] = 0;
+        String strA = a + "";
+        String strB = b + "";
+        if (strA.length() < 3 || strB.length() < 2) {
+            return false;
         }
-        String aStr = new StringBuilder().append(a).toString();
-        for (int i = 0; i < aStr.length(); i++) {
-            arr1[Integer.parseInt(new StringBuilder().append(aStr.charAt(i)).toString())]++;
-        }
-        Integer[] arr2 = new Integer[10];
-        for (int i = 0; i < arr1.length; i++) {
-            arr2[i] = 0;
-        }
-        String bStr = new StringBuilder().append(b).toString();
-        for (int i = 0; i < bStr.length(); i++) {
-            arr2[Integer.parseInt(new StringBuilder().append(bStr.charAt(i)).toString())]++;
-        }
-        for (int i = 0; i < 10; i++) {
-            if (arr1[i] >= 3 && arr2[i] >= 2) {
-                return true;
+        for (int i = 2; i < strA.length(); i++) {
+            if (strA.charAt(i - 2) == strA.charAt(i - 1) && strA.charAt(i - 1) == strA.charAt(i)) {
+                char sim = strA.charAt(i - 1);
+                for (int j = 1; j < strB.length(); j++) {
+                    if (strB.charAt(j - 1) == sim && sim == strB.charAt(j)) {
+                        return true;
+                    }
+                }
             }
         }
         return false;
+        // Integer[] arr1 = new Integer[10];
+        // for (int i = 0; i < arr1.length; i++) {
+        // arr1[i] = 0;
+        // }
+        // String aStr = new StringBuilder().append(a).toString();
+        // for (int i = 0; i < aStr.length(); i++) {
+        // arr1[Integer.parseInt(new
+        // StringBuilder().append(aStr.charAt(i)).toString())]++;
+        // }
+        // Integer[] arr2 = new Integer[10];
+        // for (int i = 0; i < arr1.length; i++) {
+        // arr2[i] = 0;
+        // }
+        // String bStr = new StringBuilder().append(b).toString();
+        // for (int i = 0; i < bStr.length(); i++) {
+        // arr2[Integer.parseInt(new
+        // StringBuilder().append(bStr.charAt(i)).toString())]++;
+        // }
+        // for (int i = 0; i < 10; i++) {
+        // if (arr1[i] >= 3 && arr2[i] >= 2) {
+        // return true;
+        // }
+        // }
+        // return false;
     }
 
     public static int countUniqueBooks(String stringSequence, String bookEnd) {
