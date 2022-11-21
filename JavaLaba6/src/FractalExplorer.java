@@ -18,7 +18,10 @@ import java.io.File;
 import java.awt.event.*;
 
 public class FractalExplorer {
-    /** Поля для enableUI **/
+    /**
+     * Поля для enableUI
+     * чтобы была возможность влиять на них в других методах
+     */
     private JButton saveButton;
     private JButton resetButton;
     private JComboBox<FractalGenerator> selectFractal;
@@ -119,12 +122,18 @@ public class FractalExplorer {
         }
     }
 
+    /*
+     * Включает выключает интерфейс
+     */
     private void enableUI(boolean val) {
         selectFractal.setEnabled(val);
         resetButton.setEnabled(val);
         saveButton.setEnabled(val);
     }
 
+    /*
+     * Создает поток для выполнения фоновой задачи
+     */
     private class FractalWorker extends SwingWorker<Object, Object> {
         int yCoordinate;
         int[] calcRGBValues;
@@ -157,6 +166,9 @@ public class FractalExplorer {
             return null;
         }
 
+        /*
+         * Выполняется при вызове метода execute()
+         */
         protected void done() {
             for (int i = 0; i < calcRGBValues.length; i++) {
                 display.drawPixel(i, yCoordinate, calcRGBValues[i]);
@@ -171,8 +183,7 @@ public class FractalExplorer {
     }
 
     private class ButtonHandler implements ActionListener {
-
-        @Override // метод созданный по умолчанию
+        @Override
         public void actionPerformed(ActionEvent e) {
             // Возващает "Reset" для reset'a или "Save"
             String comand = e.getActionCommand();
