@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingWorker;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -17,9 +18,19 @@ import java.io.File;
 import java.awt.event.*;
 
 public class FractalExplorer {
+    /** Поля для enableUI **/
+    private JButton saveButton;
+    private JButton resetButton;
+    private JComboBox<FractalGenerator> selectFractal;
+    // Показывает количество обрабатываемых строк
+    private int rowsRemaining;
+
     private int displaySize;
+
     private JImageDisplay display;
+
     private FractalGenerator fractal;
+
     private Rectangle2D.Double range;
 
     /**
@@ -39,27 +50,18 @@ public class FractalExplorer {
      * Создает интерфейс
      */
     public void createAndShowGUI() {
-        display.setLayout(new BorderLayout());
         // Создаем окно с заголовком
+        display.setLayout(new BorderLayout());
         JFrame frame = new JFrame("Fractal Explorer");
         frame.add(display, BorderLayout.CENTER);
-        // Создаем кнопку
-        JButton resetButton = new JButton("Reset scale");
+
+        // Создаем кнопку Сброса
+        resetButton = new JButton("Reset scale");
         resetButton.setActionCommand("Reset");
         // Обработчик для конпки сброса
-        ButtonHandler handler = new ButtonHandler();
-        resetButton.addActionListener(handler);
+        ButtonHandler resetHandler = new ButtonHandler();
+        resetButton.addActionListener(resetHandler);
 
-        // Кнопка сохранения
-        JButton saveButton = new JButton("Save");
-        ButtonHandler saveHandler = new ButtonHandler();
-        saveButton.addActionListener(saveHandler);
-
-        JPanel southPanel = new JPanel();
-        southPanel.add(saveButton);
-        southPanel.add(resetButton);
-
-        frame.add(southPanel, BorderLayout.SOUTH);
         // Обработчик для клика мыши по фракталу
         MouseHandler click = new MouseHandler();
         display.addMouseListener(click);
@@ -67,8 +69,7 @@ public class FractalExplorer {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Выпадающее окно
-        JComboBox<FractalGenerator> selectFractal = new JComboBox<FractalGenerator>();
-
+        selectFractal = new JComboBox<FractalGenerator>();
         FractalGenerator mandelbrot = new Mandelbrot();
         selectFractal.addItem(mandelbrot);
         FractalGenerator tricorn = new Tricorn();
@@ -85,6 +86,19 @@ public class FractalExplorer {
         panel.add(selectFractal);
         frame.add(panel, BorderLayout.NORTH);
 
+        // Кнопка сохранения
+        saveButton = new JButton("Save");
+
+        // Обработчик сохранения
+        ButtonHandler saveHandler = new ButtonHandler();
+        saveButton.addActionListener(saveHandler);
+
+        // Нижняя панель
+        JPanel southPanel = new JPanel();
+        southPanel.add(saveButton);
+        southPanel.add(resetButton);
+        frame.add(southPanel, BorderLayout.SOUTH);
+
         frame.pack();
         frame.setVisible(true);
         frame.setResizable(false);
@@ -95,26 +109,65 @@ public class FractalExplorer {
      * Окрашивает пиксели в зависимотси от итерации
      */
     private void drawFractal() {
+
+        enableUI(false);
+        rowsRemaining = displaySize;
+
         for (int x = 0; x < displaySize; x++) {
-            for (int y = 0; y < displaySize; y++) {
+            FractalWorker drawRow = new FractalWorker(x);
+            drawRow.execute();
+        }
+    }
 
+    private void enableUI(boolean val) {
+        selectFractal.setEnabled(val);
+        resetButton.setEnabled(val);
+        saveButton.setEnabled(val);
+    }
+
+    private class FractalWorker extends SwingWorker<Object, Object> {
+        int yCoordinate;
+        int[] calcRGBValues;
+
+        private FractalWorker(int row) {
+            yCoordinate = row;
+        }
+
+        @Override
+        protected Object doInBackground() throws Exception {
+
+            calcRGBValues = new int[displaySize];
+
+            for (int i = 0; i < calcRGBValues.length; i++) {
                 double xCoord = FractalGenerator.getCoord(range.x, range.x +
-                        range.width, displaySize, x);
+                        range.width, displaySize, i);
                 double yCoord = FractalGenerator.getCoord(range.y, range.y +
-                        range.height, displaySize, y);
-
+                        range.height, displaySize, yCoordinate);
                 int iteration = fractal.numIterations(xCoord, yCoord);
 
                 if (iteration == -1) {
-                    display.drawPixel(x, y, 0);
+                    calcRGBValues[i] = 0;
                 } else {
                     float hue = 0.7f + (float) iteration / 200f;
                     int rgbColor = Color.HSBtoRGB(hue, 1f, 1f);
-                    display.drawPixel(x, y, rgbColor);
+                    // display.drawPixel(x, y, rgbColor);
+                    calcRGBValues[i] = rgbColor;
                 }
             }
+            return null;
         }
-        display.repaint();
+
+        protected void done() {
+            for (int i = 0; i < calcRGBValues.length; i++) {
+                display.drawPixel(i, yCoordinate, calcRGBValues[i]);
+            }
+            display.repaint(0, 0, yCoordinate, displaySize, 1);
+
+            rowsRemaining--;
+            if (rowsRemaining == 0) {
+                enableUI(true);
+            }
+        }
     }
 
     private class ButtonHandler implements ActionListener {
@@ -171,6 +224,10 @@ public class FractalExplorer {
      */
     private class MouseHandler extends MouseAdapter {
         public void mouseClicked(MouseEvent e) {
+            // Не позволяет кликнуть если идет загрузка
+            if (rowsRemaining != 0) {
+                return;
+            }
             // Координаты клика
             int x = e.getX();
             int y = e.getY();
