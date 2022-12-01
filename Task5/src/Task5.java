@@ -325,6 +325,9 @@ public class Task5 {
     }
 
     public static String hexLattice(int num) {
+        if (num < 0) {
+            return "Invalid";
+        }
         int cur = 1;
         int i = 0;
         int step = 6;
