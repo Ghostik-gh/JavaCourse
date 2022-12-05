@@ -19,8 +19,6 @@ public class Crawler {
     }
 
     public static void main(String[] args) throws Exception {
-        int depth = 4;
-        String startURL = "";
         // if (args.length > 2 || args.length < 1) {
         // System.out.println("usage: java Crawler <URL> <?depth>");
         // // System.exit(1);
@@ -39,8 +37,11 @@ public class Crawler {
         // // System.exit(1);
         // }
         // }
+        String startURL = "";
+        int depth = 4;
         int currentDepth = 0;
-        startURL = "https://www.lesswrong.com";
+        // startURL = "https://www.lesswrong.com";
+        startURL = "https://yandex.ru/maps/213/moscow/?ll=37.617700%2C55.755863&z=10";
         // startURL = "https://hpmor.ru/book/1/71/";
         // startURL = "https://jsonplaceholder.typicode.com/users";
         LinkedList<URLDepth> myList = new LinkedList<URLDepth>();
@@ -49,12 +50,10 @@ public class Crawler {
         while (currentDepth != depth) {
             currentDepth++;
             int remainderSize = myListRemainder.size();
-
-            for (int i = 0; i < myList.size(); i++) {
-                System.out.println(myList.get(i).toString());
-            }
-            System.out.println("========================================");
+            // System.out.println("========================================");
             for (int i = 0; i < remainderSize; i++) {
+                // System.out.println(myListRemainder.get(i).getUrl() + " <==> " +
+                // currentDepth);
                 if (currentDepth == depth) {
                     myList.add(new URLDepth(myListRemainder.get(i).getUrl(), currentDepth));
                     continue;
@@ -70,13 +69,17 @@ public class Crawler {
                     }
                     myList.add(new URLDepth(myListRemainder.get(i).getUrl(), currentDepth));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    // e.printStackTrace();
                 } finally {
                     myListRemainder.remove(myListRemainder.get(i));
                 }
             }
+            if (currentDepth == depth) {
+                myListRemainder.removeAll(myListRemainder);
+            }
         }
 
+        System.out.println(myList.toString());
     }
     // InputStream inputStream = null;
     // FileOutputStream outputStream = null;
