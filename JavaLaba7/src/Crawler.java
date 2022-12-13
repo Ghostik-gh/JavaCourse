@@ -47,7 +47,7 @@ public class Crawler implements Runnable {
 
     @Override
     public void run() {
-        crawl("https://www.lesswrong.com", 2);
+        crawl(startURL, 1);
     }
 
     private static Document request(String url) {
@@ -90,7 +90,7 @@ public class Crawler implements Runnable {
                     }
 
                 } catch (Exception e) {
-                    // e.printStackTrace();
+                    e.printStackTrace();
                 } finally {
                     myListRemainder.remove(myListRemainder.get(i));
                 }

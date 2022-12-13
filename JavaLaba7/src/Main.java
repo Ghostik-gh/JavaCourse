@@ -1,11 +1,8 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class Main {
     public static void main(String[] args) throws Exception {
 
-        WebScanner scanner = new WebScanner();
-        scanner.start("https://hpmor.ru/book/1/71/");
+        WebScanner.start("https://hpmor.ru/book/1/71/");
 
         // Crawler craw = new Crawler("https://www.lesswrong.com", 2);
         // if (args.length > 2 || args.length < 1) {

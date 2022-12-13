@@ -6,7 +6,6 @@ public class WebScanner {
 
      public static void start(String url) {
           Crawler craw = new Crawler(url, 1);
-
           try {
                craw.getThread().join();
           } catch (InterruptedException e) {
