@@ -1,15 +1,15 @@
 // import java.net.*;
 
-public class URLDepth {
+public class URLDepthPair {
     private String currentURL;
     private int currentDepth;
 
-    public URLDepth(String url, int depth) {
+    public URLDepthPair(String url, int depth) {
         currentURL = url;
         currentDepth = depth;
     }
 
-    public URLDepth(String url) {
+    public URLDepthPair(String url) {
         currentURL = url;
         currentDepth = 1;
     }
@@ -23,6 +23,6 @@ public class URLDepth {
     }
 
     public String toString() {
-        return "<" + currentURL + "\tdepth: " + currentDepth + ">";
+        return "<" + currentURL + "\tdepth: " + currentDepth + ">\n";
     }
 }
