@@ -6,7 +6,7 @@ public class WebScanner {
      public WebScanner(String url, int depth) {
           pool = new URLPool();
           pool.setMaxDepth(depth);
-          pool.setCountThread(100);
+          pool.setCountThread(10);
           pool.addRemaindLink(url, 0);
      }
 
@@ -16,6 +16,7 @@ public class WebScanner {
                // System.out.println(size);
                for (int i = 0; i < Math.min(size, pool.getCountThread()); i++) {
                     Crawler craw = new Crawler(pool.getRemaindLink().getUrl(), pool.getRemaindLink().getDepth());
+                    pool.removeRemaindLink();
                     try {
                          craw.getThread().join();
                     } catch (InterruptedException e) {
