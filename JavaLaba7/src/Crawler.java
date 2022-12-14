@@ -19,6 +19,8 @@ public class Crawler {
     }
 
     public static void main(String[] args) throws Exception {
+
+        long m = System.currentTimeMillis();
         // if (args.length > 2 || args.length < 1) {
         // System.out.println("usage: java Crawler <URL> <?depth>");
         // // System.exit(1);
@@ -38,10 +40,11 @@ public class Crawler {
         // }
         // }
         String startURL = "";
-        int depth = 4;
+        int depth = 3;
         int currentDepth = 0;
-        // startURL = "https://www.lesswrong.com";
-        startURL = "https://yandex.ru/maps/213/moscow/?ll=37.617700%2C55.755863&z=10";
+        startURL = "https://www.lesswrong.com";
+        // startURL =
+        // "https://yandex.ru/maps/213/moscow/?ll=37.617700%2C55.755863&z=10";
         // startURL = "https://hpmor.ru/book/1/71/";
         // startURL = "https://jsonplaceholder.typicode.com/users";
         LinkedList<URLDepth> myList = new LinkedList<URLDepth>();
@@ -80,6 +83,8 @@ public class Crawler {
         }
 
         System.out.println(myList.toString());
+        System.out.println(myList.size());
+        System.out.println((double) (System.currentTimeMillis() - m) / 1000);
     }
     // InputStream inputStream = null;
     // FileOutputStream outputStream = null;

@@ -6,7 +6,7 @@ public class WebScanner {
      public WebScanner(String url, int depth) {
           pool = new URLPool();
           pool.setMaxDepth(depth);
-          pool.setCountThread(10);
+          pool.setCountThread(100);
           pool.addRemaindLink(url, 0);
      }
 
@@ -26,7 +26,7 @@ public class WebScanner {
           }
           // pool.printSeenList();
           System.out.println(pool.getSeenList().toString());
-          System.out.println("EEEEEEEEEEEND");
+          System.out.println(pool.getSeenList().size());
 
           return;
      }

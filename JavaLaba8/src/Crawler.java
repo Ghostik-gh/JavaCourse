@@ -16,7 +16,7 @@ import org.jsoup.select.Elements;
 public class Crawler implements Runnable {
 
     private static int maxDepth = WebScanner.pool.getMaxDepth();
-    private static int currentDepth;
+    private int currentDepth;
     private String findURL;
     private Thread thread;
     private static URLPool pool = WebScanner.pool;
@@ -24,12 +24,11 @@ public class Crawler implements Runnable {
     public Crawler(String url, int depth) {
         findURL = url;
         currentDepth = depth;
-        pool.removeRemaindLink();
         URLPool.addProcUrl();
         // System.out.println(pool.getRemaindLink());
         thread = new Thread(this);
         thread.start();
-        // System.out.println("Crawler Created!" + thread.getId());
+        System.out.println("Crawler Created!" + thread.getId());
     }
 
     private static boolean isVaildLink(String link) {
@@ -52,6 +51,7 @@ public class Crawler implements Runnable {
             if (con.response().statusCode() == 200) {
                 // System.out.println("Connect Successful: " + doc.title());
                 WebScanner.pool.addSeenLink(findURL, currentDepth); // myList.add(new URLDepthPair(url, currentDepth));
+                System.out.println(findURL + " " + currentDepth);
             }
             return doc;
         } catch (IOException e) {
@@ -70,6 +70,9 @@ public class Crawler implements Runnable {
         }
         try {
             Document document = request();
+            if (document == null) {
+                return;
+            }
             Elements links = document.body().select("a");
             for (var el : links) {
                 if (isVaildLink(el.attr("href"))) {
