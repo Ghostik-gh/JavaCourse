@@ -24,11 +24,11 @@ public class Crawler implements Runnable {
     public Crawler(String url, int depth) {
         findURL = url;
         currentDepth = depth;
+        pool.removeRemaindLink();
         URLPool.addProcUrl();
-        // System.out.println(pool.getRemaindLink());
         thread = new Thread(this);
         thread.start();
-        System.out.println("Crawler Created!" + thread.getId());
+        // System.out.println("Crawler Created!" + thread.getId());
     }
 
     private static boolean isVaildLink(String link) {
@@ -50,9 +50,13 @@ public class Crawler implements Runnable {
 
             if (con.response().statusCode() == 200) {
                 // System.out.println("Connect Successful: " + doc.title());
-                WebScanner.pool.addSeenLink(findURL, currentDepth); // myList.add(new URLDepthPair(url, currentDepth));
-                System.out.println(findURL + " " + currentDepth);
+                WebScanner.pool.addSeenLink(findURL, currentDepth);
+                if (currentDepth == maxDepth) {
+                    return null;
+                }
+                // System.out.println(findURL + " " + currentDepth);
             }
+
             return doc;
         } catch (IOException e) {
             e.printStackTrace();
@@ -61,36 +65,29 @@ public class Crawler implements Runnable {
     }
 
     public void crawl() {
-        // myListRemainder.add(newURLDepthPair(startURL, 0));
-        // System.out.println(currentDepth + " " + maxDepth);
-        if (currentDepth == maxDepth) {
-            WebScanner.pool.addSeenLink(findURL, currentDepth);
+
+        if (currentDepth > maxDepth) {
+            WebScanner.pool.removeAllRemaind();
             return;
-            // myList.add(new URLDepthPair(myListRemainder.get(i).getUrl(), currentDepth));
         }
+
         try {
             Document document = request();
             if (document == null) {
+                URLPool.removeProcUrl();
                 return;
             }
             Elements links = document.body().select("a");
             for (var el : links) {
                 if (isVaildLink(el.attr("href"))) {
-                    WebScanner.pool.addRemaindLink(el.attr("href"), currentDepth + 1);
-                    // myListRemainder.add(new URLDepthPair(el.attr("href"),
-                    // myListRemainder.get(i).getDepth() + 1));
+                    int nextDepth = currentDepth + 1;
+                    WebScanner.pool.addRemaindLink(el.attr("href"), nextDepth);
+                    System.out.println("ADD: " + el.attr("href") + " " + nextDepth);
                 }
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        // finally {
-        // WebScanner.pool.removeRemaindLink(findURL, currentDepth);
-        // // myListRemainder.remove(myListRemainder.get(i));
-        // }
-        if (currentDepth > maxDepth) {
-            WebScanner.pool.removeAllRemaind();
         }
         URLPool.removeProcUrl();
     }

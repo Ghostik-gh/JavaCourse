@@ -40,12 +40,12 @@ public class Crawler {
         // }
         // }
         String startURL = "";
-        int depth = 3;
+        int depth = 2;
         int currentDepth = 0;
-        startURL = "https://www.lesswrong.com";
+        // startURL = "https://www.lesswrong.com";
         // startURL =
         // "https://yandex.ru/maps/213/moscow/?ll=37.617700%2C55.755863&z=10";
-        // startURL = "https://hpmor.ru/book/1/71/";
+        startURL = "https://hpmor.ru/book/1/71/";
         // startURL = "https://jsonplaceholder.typicode.com/users";
         LinkedList<URLDepth> myList = new LinkedList<URLDepth>();
         LinkedList<URLDepth> myListRemainder = new LinkedList<URLDepth>();

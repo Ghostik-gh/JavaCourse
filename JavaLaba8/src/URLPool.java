@@ -41,7 +41,7 @@ public class URLPool {
         return MAX_THREAD;
     }
 
-    public synchronized void addRemaindLink(String url, int depth) {
+    public static void addRemaindLink(String url, int depth) {
         myListRemainder.add(new URLDepthPair(url, depth));
     }
 
@@ -60,7 +60,7 @@ public class URLPool {
     }
 
     public synchronized URLDepthPair getRemaindLink() {
-        return myListRemainder.get(0);
+        return myListRemainder.isEmpty() ? null : myListRemainder.get(0);
     }
 
     public synchronized int size() {

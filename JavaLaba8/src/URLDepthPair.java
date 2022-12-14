@@ -23,6 +23,6 @@ public class URLDepthPair {
     }
 
     public String toString() {
-        return "<" + currentURL + "\tdepth: " + currentDepth + ">";
+        return "<depth: " + currentDepth + " | url=" + currentURL + ">";
     }
 }
