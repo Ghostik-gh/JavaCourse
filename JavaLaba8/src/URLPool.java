@@ -25,23 +25,32 @@ public class URLPool {
         return countProcessedURLs;
     }
 
-    public void setMaxDepth(int depth) {
+    public static boolean findUrl(String url) {
+        for (URLDepthPair urlDepthPair : seenLinks) {
+            if (urlDepthPair.getUrl().equals(url)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public synchronized void setMaxDepth(int depth) {
         MAX_DEPTH = depth;
     }
 
-    public int getMaxDepth() {
+    public synchronized int getMaxDepth() {
         return MAX_DEPTH;
     }
 
-    public void setCountThread(int countThread) {
+    public synchronized void setCountThread(int countThread) {
         MAX_THREAD = countThread;
     }
 
-    public int getCountThread() {
+    public synchronized int getCountThread() {
         return MAX_THREAD;
     }
 
-    public static void addRemaindLink(String url, int depth) {
+    public synchronized void addRemaindLink(String url, int depth) {
         myListRemainder.add(new URLDepthPair(url, depth));
     }
 

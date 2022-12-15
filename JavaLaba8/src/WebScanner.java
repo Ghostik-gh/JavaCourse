@@ -12,18 +12,25 @@ public class WebScanner {
 
      public void run() throws InterruptedException {
           while (pool.size() != 0) {
-               int size = pool.size();
-               System.out.println(size);
-               for (int i = 0; i < Math.min(size, pool.getCountThread()); i++) {
+               int poolSize = pool.size();
+               int size = Math.min(poolSize, pool.getCountThread());
+               // System.out.println(poolSize);
+               Crawler[] crawlers = new Crawler[size];
+               // for (int i = 0; i < crawlers.length; i++) {
+               // Crawler craw = new Crawler("null", -1);
+               // }
+               for (int i = 0; i < size; i++) {
                     if (pool.size() == 0) {
                          return;
                     }
                     Crawler craw = new Crawler(pool.getRemaindLink().getUrl(), pool.getRemaindLink().getDepth());
-                    try {
-                         craw.getThread().join();
-                    } catch (InterruptedException e) {
-                         e.printStackTrace();
-                    }
+                    crawlers[i] = craw;
+                    // crawlers[i].updateCraw(pool.getRemaindLink().getUrl(),
+                    // pool.getRemaindLink().getDepth()); // = craw;
+                    crawlers[i].getThread().run();
+               }
+               for (int i = 0; i < size; i++) {
+
                }
           }
 

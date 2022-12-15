@@ -2,7 +2,7 @@
 public class Main {
     public static void main(String[] args) throws Exception {
         long m = System.currentTimeMillis();
-        WebScanner scanner = new WebScanner("https://yandex.ru/maps/213/moscow/?ll=37.617700%2C55.755863&z=10", 2);
+        WebScanner scanner = new WebScanner("http://www.consultant.ru/", 3);
         scanner.run();
         WebScanner.printResult();
         System.out.println((double) (System.currentTimeMillis() - m) / 1000);

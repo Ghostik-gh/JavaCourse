@@ -27,8 +27,12 @@ public class Crawler implements Runnable {
         pool.removeRemaindLink();
         URLPool.addProcUrl();
         thread = new Thread(this);
-        thread.start();
         // System.out.println("Crawler Created!" + thread.getId());
+    }
+
+    public void updateCraw(String url, int n) {
+        findURL = url;
+        currentDepth = n;
     }
 
     private static boolean isVaildLink(String link) {
@@ -45,26 +49,29 @@ public class Crawler implements Runnable {
 
     private Document request() {
         try {
+            if (URLPool.findUrl(findURL)) {
+                return null;
+            }
+            if (currentDepth == maxDepth) {
+                WebScanner.pool.addSeenLink(findURL, currentDepth);
+                return null;
+            }
             Connection con = Jsoup.connect(findURL);
             Document doc = con.get();
-
             if (con.response().statusCode() == 200) {
-                // System.out.println("Connect Successful: " + doc.title());
+                System.out.println("Connect Successful: " + findURL);
                 WebScanner.pool.addSeenLink(findURL, currentDepth);
-                if (currentDepth == maxDepth) {
-                    return null;
-                }
-                // System.out.println(findURL + " " + currentDepth);
-            }
 
-            return doc;
+                // System.out.println(findURL + " " + currentDepth);
+                return doc;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public void crawl() {
+    private void crawl() {
 
         if (currentDepth > maxDepth) {
             WebScanner.pool.removeAllRemaind();
@@ -82,7 +89,7 @@ public class Crawler implements Runnable {
                 if (isVaildLink(el.attr("href"))) {
                     int nextDepth = currentDepth + 1;
                     WebScanner.pool.addRemaindLink(el.attr("href"), nextDepth);
-                    System.out.println("ADD: " + el.attr("href") + " " + nextDepth);
+                    // System.out.println("ADD: " + el.attr("href") + " " + nextDepth);
                 }
             }
 
